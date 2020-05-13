@@ -1,0 +1,57 @@
+﻿@using MessManagementSystemWebApp.Models;
+@using MessManagementSystemWebApp.Manager;
+@{
+    ViewBag.Title = "PerUser";
+}
+
+<h2>Billing History</h2>
+
+@if(ViewBag.userId != null)
+{
+    int counter = 1;
+    UserManager userManager = new UserManager();
+    User userToShowInfo = userManager.GetUserByUserId(ViewBag.userId);
+    TransactionManager transactionManager = new TransactionManager();
+
+    List<Transaction> listOfTransaction = transactionManager.GetListOfAllTransactionByUser(ViewBag.userId);
+
+    <p>Billing History of <b>@userToShowInfo.Name</b> </p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sl No</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Operated By</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+
+            @foreach (Transaction transaction in listOfTransaction)
+            {
+            <tr>
+                <td>@(counter++)</td>
+                <td>@if (transaction.TransactionType == Transaction.add) {<text>+</text> } else{<text>-</text>} @transaction.Amount</td>
+                <td>@DateTime.Parse(transaction.Date).ToString("yyyy-MM-dd")</td>               
+                <td>@userManager.GetUserByUserId(transaction.OperatedByUserId).Name</td>
+
+            </tr>
+
+            }
+
+            <tr>
+                <td><b>Current Balance</b></td>
+                <td>@userToShowInfo.AccountBalance</td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+}
+

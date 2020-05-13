@@ -1,0 +1,177 @@
+﻿@using MessManagementSystemWebApp.Manager;
+@using MessManagementSystemWebApp.Models;
+@using MessManagementSystemWebApp.OtherClass;
+@{
+    ViewBag.Title = "User Meal Informaion";
+    User currentUser = SetSession.GetCurrentUser();
+    
+
+}
+
+<h2>Meal Information of @currentUser.Name</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "" }))
+{
+    <div class="container">
+
+        <div class="form-group row">
+
+            @Html.Label("fromdate", "From Date", new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-5">
+                @Html.TextBox("fromdate", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.Label("todate", "To Date", new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-5">
+                @Html.TextBox("todate", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+
+}
+
+<br />
+<br />
+
+@if (ViewBag.fromdate != null && ViewBag.todate != null)
+{
+
+    OrderManager orderManager = new OrderManager();
+
+    DateTime fromDate = DateTime.Parse(ViewBag.fromdate);
+    DateTime toDate = DateTime.Parse(ViewBag.todate);
+
+    
+
+    int dateDifference = (toDate - fromDate).Days;
+
+    <p>Meal Information of <b>@currentUser.Name</b>  From Date <b>@ViewBag.fromdate</b>  to <b>@ViewBag.todate</b></p>
+
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Sl No.</th>
+                <th>Date</th>
+                <th>Meal 1</th>
+                <th>Meal 2</th>
+                <th>Meal 3</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @for (int i = 0; i < dateDifference + 1; i++)
+            {
+                <tr>
+
+                    @{
+                        Order currentOrder = orderManager.GetOrder(fromDate.AddDays(i).ToString("yyyy-MM-dd"), currentUser.Id);
+
+
+                        if (currentOrder != null)
+                        {
+
+
+
+                            <td>@(i + 1)</td>
+                            <td>@fromDate.AddDays(i).ToString("yyyy-MM-dd")</td>
+                            <td>@currentOrder.Meal1</td>
+                            <td>@currentOrder.Meal2</td>
+                            <td>@currentOrder.Meal3</td>
+
+                        }
+                        else
+                        {
+                            <td>@(i + 1)</td>
+                            <td>@fromDate.AddDays(i).ToString("yyyy-MM-dd")</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+
+
+                        }
+
+
+
+                    }
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+    <br />
+    <br />
+
+    <table>
+
+        <tr>
+            <td style="text-align: right;" class="font-weight-bold">Total Meals &nbsp; = &nbsp; </td>
+            <td>@orderManager.GetTotalMealBetweenDays(ViewBag.fromdate, ViewBag.todate, currentUser.Id)</td>
+        </tr>
+        @*<tr>
+            <td style="text-align: right;" class="font-weight-bold">Total Meal Cost &nbsp; = &nbsp; </td>
+            <td>@orderManager.GetTotalMealCostBetweenDays(ViewBag.fromdate, ViewBag.todate, currentUser.Id)</td>
+        </tr>*@
+
+    </table>
+
+}
+
+
+
+
+@section scripts{
+    <script>
+
+        var datepickerOption =
+        {
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true
+        }
+
+        $(function () {
+            $("#fromdate").datepicker(datepickerOption);
+
+            @if(ViewBag.fromdate != null)
+            {
+                 <text>
+                    $("#fromdate").datepicker("setDate", new Date('@ViewBag.fromdate'))
+                 </text>
+            }
+            else
+            {
+                <text>
+                    $("#fromdate").datepicker("setDate", new Date())
+                </text>
+
+            }
+
+        });
+
+        $(function () {
+            $("#todate").datepicker(datepickerOption);
+
+            @if(ViewBag.todate != null)
+            {
+                 <text>
+                    $("#todate").datepicker("setDate", new Date('@ViewBag.todate'))
+                 </text>
+            }
+            else
+            {
+                <text>
+                    $("#todate").datepicker("setDate", new Date())
+                </text>
+
+            }
+
+        });
+    </script>
+}

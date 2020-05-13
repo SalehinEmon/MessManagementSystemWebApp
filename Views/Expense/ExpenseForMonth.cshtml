@@ -1,0 +1,116 @@
+﻿@using MessManagementSystemWebApp.Manager;
+@using MessManagementSystemWebApp.Models;
+@{
+    ViewBag.Title = "Expense For Month";
+    List<SelectListItem> monthDropDownList = new List<SelectListItem>();
+
+    if (ViewBag.monthDropDownList != null)
+    {
+        monthDropDownList = ViewBag.monthDropDownList;
+    }
+}
+
+
+@section cssandjs
+{
+    <link href="~/Content/jqueryvalidation/errorMsg.css" rel="stylesheet" />
+
+}
+
+<h2>Expense For Month</h2>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "mainForm", id = "mainform" }))
+{
+
+    <div class="form-group row">
+
+        @Html.Label("month", "Month", new { @class = "col-sm-1 col-form-label" })
+        <div class="col-sm-3">
+            @Html.DropDownList("month", monthDropDownList, new { id = "month", @class = "browser-default custom-select mb-4 form-control" })
+        </div>
+
+
+
+        @Html.Label("year", "Year", new { id = "year", @class = "col-sm-1 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("year", DateTime.Now.Year, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-7">
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </div>
+    </div>
+
+}
+
+@if (ViewBag.ListOfAllExpenseOfMonth != null)
+{
+    List<Expense> listOfExpense = ViewBag.ListOfAllExpenseOfMonth;
+    UserManager userManager = new UserManager();
+    int counter = 1;
+
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sl No</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Expense expense in listOfExpense)
+            {
+                <tr>
+                    <td>@(counter++)</td>
+                    <td>@userManager.GetUserByUserId(expense.UserId).Name</td>
+                    <td>@expense.Amount</td>
+                    <td>@DateTime.Parse(expense.Date).ToString("yyyy-MM-dd")</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+}
+
+
+<script src="~/Content/jqueryvalidation/jquery.validate.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $("#mainform").validate({
+            rules: {
+                month: {
+                    required: true
+                    //minlength:2
+                },
+                year:
+                {
+                    required: true,
+                    min: 2019
+                }
+            },
+
+
+            messages: {
+                firstname: {
+                    minlength: "User Name should be more then 2 !!!",
+                    required: "User name Should be provided"
+                },
+                testemail: {
+                    required: "Email should be provided",
+                    email: "Provide a valid email"
+                }
+            }
+
+        });
+
+    });
+</script>

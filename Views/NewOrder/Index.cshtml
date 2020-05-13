@@ -1,0 +1,247 @@
+﻿@using MessManagementSystemWebApp.Models;
+@using MessManagementSystemWebApp.Manager;
+@using MessManagementSystemWebApp.OtherClass;
+@using System;
+@{
+    ViewBag.Title = "Add new Order";
+
+    TimeManager timeManager = new TimeManager();
+    OrderManager orderManager = new OrderManager();
+    Time lastTime = timeManager.GetLastTime();
+
+    User currentUser = SetSession.GetCurrentUser();
+
+    DateTime meal1EndTime = DateTime.Parse(lastTime.Time1End);
+    DateTime meal2EndTime = DateTime.Parse(lastTime.Time2End);
+    DateTime meal3EndTime = DateTime.Parse(lastTime.Time3End);
+    DateTime currentTime =  BdTime.GetCurrentDate();
+
+    //DateTime currentTime =  DateTime.Parse(BdTime.GetCurrentDate().ToString("HH:mm"));
+
+    Order usersOrder = orderManager.GetOrderByUseIdAndDate(currentUser.Id, currentTime.ToString("yyyy-MM-dd"));
+
+}
+<h2>Add New Order</h2>
+<h3>Current Time : &nbsp; @currentTime.ToString("hh:mm tt")</h3>
+
+@if (ViewBag.msg != null)
+{
+    <h3>@ViewBag.msg</h3>
+}
+
+<form method="post" action="">
+
+    <div class="form-group row">
+
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input class="form-check-input" name="mealOne" type="checkbox" id="mealOne" value=".5"
+
+
+                @{ 
+                    if(currentTime >= meal1EndTime)
+                    {
+                        if((usersOrder != null) )
+                        {
+                            if(usersOrder.Meal1 >= .5)
+                            {
+                                <text>
+                                    disabled checked/>
+                                    <input type="hidden" name="mealOne" value=".5" />
+                                </text>
+                            }
+                            else
+                            {
+                                <text> disabled /> </text>
+                            }
+                        }
+                        else
+                        {
+                            <text> disabled /> </text>
+                        }
+                    }
+                    else
+                    {
+                        if(usersOrder != null)
+                        {
+                            if(usersOrder.Meal1 == 0)
+                            {
+                                <text> /> </text>
+                            }
+                            else
+                            {
+                                <text> checked />  </text>
+                            }
+
+                        }
+                        else
+                        {
+                            <text> checked /> </text>
+                        }
+                    }
+                }
+            
+
+            <label class="form-check-label" for="mealOne">
+                Breakfast <b>(Last Time is @meal1EndTime.ToString("hh:mm tt"))</b>
+            </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input class="form-check-input" name="mealTwo" type="checkbox" id="mealTwo" value="1"
+
+
+                  @{ 
+                    if(currentTime >= meal2EndTime)
+                    {
+                        if((usersOrder != null) )
+                        {
+                            if(usersOrder.Meal2 >= 1)
+                            {
+                                <text>
+                                    disabled checked/>
+                                    <input type="hidden" name="mealTwo" value="1" />
+                                </text>
+                            }
+                            else
+                            {
+                                <text> disabled /> </text>
+                            }
+                        }
+                        else
+                        {
+                            <text> disabled /> </text>
+                        }
+                    }
+                    else
+                    {
+                        if(usersOrder != null)
+                        {
+                            if(usersOrder.Meal2 == 0)
+                            {
+                                <text> /> </text>
+                            }
+                            else
+                            {
+                                <text> checked />  </text>
+                            }
+
+                        }
+                        else
+                        {
+                            <text> checked /> </text>
+                        }
+                    }
+                }
+
+
+            <label class="form-check-label" for="mealTwo">
+                Lunch <b>(Last Time is @meal2EndTime.ToString("hh:mm tt"))</b>
+            </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input class="form-check-input" name="mealThree" type="checkbox" id="mealThree" value="1"
+                       
+                       
+                       
+                  @{ 
+                    if(currentTime >= meal3EndTime)
+                    {
+                        if((usersOrder != null) )
+                        {
+                            if(usersOrder.Meal3 >= 1)
+                            {
+                                <text>
+                                    disabled checked/>
+                                    <input type="hidden" name="mealThree" value="1" />
+                                </text>
+                            }
+                            else
+                            {
+                                <text> disabled /> </text>
+                            }
+                        }
+                        else
+                        {
+                            <text> disabled /> </text>
+                        }
+                    }
+                    else
+                    {
+                        if(usersOrder != null)
+                        {
+                            if(usersOrder.Meal3 == 0)
+                            {
+                                <text> /> </text>
+                            }
+                            else
+                            {
+                                <text> checked />  </text>
+                            }
+
+                        }
+                        else
+                        {
+                            <text> checked /> </text>
+                        }
+                    }
+                }
+
+            <label class="form-check-label" for="mealThree">
+                Dinner <b>(Last Time is @meal3EndTime.ToString("hh:mm tt"))</b>
+            </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Put Order</button>
+        </div>
+    </div>
+
+
+
+
+    @*<input type="checkbox" value="1" name="mealOne" /> Meal 1
+    <input type="checkbox" value="1" name="mealTwo" /> Meal 2
+    <input type="checkbox" value="1" name="mealThree" /> Meal 3
+
+    <input type="submit" name="submit" value="Put Order" />*@
+
+
+</form>
+
+@*<br />
+    <br />
+    <br />
+    <form method="post" action="">
+        <input type="checkbox" name="mealOne" value="1" checked />meal 1 <br />
+        <input type="checkbox" name="mealTwo" value="1" checked disabled />meal 2 <br />
+        <input type="checkbox" name="mealThree" value="1" />meal 3 <br />
+
+        <input type="submit" value="Submit" />
+    </form>*@
+
+<script>
+
+    document.getElementById("put_order").className += "  active";
+
+    $(function () {
+        $("#dateToSelect").datepicker();
+    });
+</script>

@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Add New Expense";
+}
+
+<h2>Add New Expense</h2>
+
+@if (ViewBag.msg != null)
+{
+    <h3>@ViewBag.msg</h3>
+}
+
+@section cssandjs
+{
+    <link href="~/Content/jqueryvalidation/errorMsg.css" rel="stylesheet" />
+
+}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post,new { @class="addExpense",id="addExpense"}))
+{
+
+    <div class="form-group row">
+
+        @Html.Label("amount", "Amount Of Expense : ", new { @class = "col-sm-2 col-form-labe" })
+        <div class="col-sm-5">
+            @Html.TextBox("amount", null, new { @class = "form-control", type = "number" })
+        </div>
+    </div>
+
+    <input type="submit" name="submit" value="Add Expense" class="btn btn-primary" />
+}
+
+<script src="~/Content/jqueryvalidation/jquery.validate.min.js"></script>
+
+<script>
+        $(document).ready(function () {
+
+        $("#addExpense").validate({
+            rules: {
+                amount: {
+                    required: true,
+                    number: true,
+                    min: 1
+                }
+
+            }
+
+        });
+
+
+    });
+</script>

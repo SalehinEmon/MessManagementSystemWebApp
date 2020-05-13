@@ -1,0 +1,52 @@
+﻿@using MessManagementSystemWebApp.Models;
+
+
+@{
+    ViewBag.Title = "List of all User";
+}
+
+<h2>List of all user</h2>
+
+@if (ViewBag.allUserList != null)
+{
+<table class="table table-bordered">
+
+    <tr>
+        <th>Name</th>
+        <th>Balance</th>
+        <th>Status</th>
+        <th>Account Type</th>
+    </tr>
+
+    @foreach(User user in ViewBag.allUserList)
+    {
+    <tr>
+        <td><a href="/ProfileInfo/Index?userId=@user.Id">@user.Name</a></td>
+
+        <td>@user.AccountBalance</td>
+
+        @if(user.Status.Equals("active"))
+        {
+            <td>Active</td>
+
+        }
+        else
+        {
+            <td>Inactive</td>
+        }
+        @if (user.AccountType == "a")
+        {
+            <td>Admin</td>
+        }
+        else
+        {
+            <td>Normal User</td>
+        }
+
+    </tr>
+    }
+</table>
+    
+}
+
+    

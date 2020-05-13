@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <link href="~/Content/jqueryvalidation/errorMsg.css" rel="stylesheet" />
+
+    <title>Sign In</title>
+
+    <!-- Bootstrap core CSS -->
+
+
+    <link href="~/Content/LogInPage/core_bootstrap_login.css" rel="stylesheet" />
+
+    <!--
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    -->
+    <!-- Custom styles for this template -->
+
+    <link href="~/Content/LogInPage/login_custom_css.css" rel="stylesheet" />
+
+    <!--
+    <link href="signin.css" rel="stylesheet">
+    -->
+    <script src="~/Content/LayoutPage/script/jquery-3.2.1.slim.min.js"></script>
+</head>
+
+
+
+
+<body class="text-center">
+    <form method="post" action="" class="form-signin" id="form-signin">
+
+        @*<img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">*@
+
+        <h1 class="h3 mb-3 font-weight-normal">Mess Management System Log In</h1>
+        <label for="inputEmail" class="sr-only">Email address</label>
+
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus> <br />
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+        @*
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+        *@
+        @if (ViewBag.msg != null)
+        {
+            <p class="text-danger font-weight-bold">@ViewBag.msg</p>
+
+        }
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+
+        @*<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>*@
+
+    </form>
+
+    <script src="~/Content/jqueryvalidation/jquery.validate.js"></script>
+
+
+    <script>
+        document.getElementById("form-signin").className += "  active";
+
+        $(document).ready(function () {
+
+            $("#form-signin").validate({
+                rules: {
+
+                    inputEmail:
+                    {
+                        required: true,
+                        email: true
+
+                    },
+                    password:
+                    {
+                        required: true
+                    }
+
+                },
+                messages:
+                {
+                    password:
+                    {
+                        required: "Please enter a Valid Password"
+                    }
+
+                }
+
+            });
+
+
+        });
+    </script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+@*
+
+    @{
+        ViewBag.Title = "Home Page";
+        Layout = null;
+    }
+        <p>Log In</p>
+
+        @if (ViewBag.msg != null)
+        {
+            if (ViewBag.user != null)
+            {
+                <h4>@ViewBag.user.Name</h4>
+            }
+            else
+            {
+                <h4>@ViewBag.msg</h4>
+            }
+
+        }
+
+
+        <form method="post" action="">
+            <table>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="email" name="email" value="" /></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" name="password" value="" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" name="submit" value="Log In" /></td>
+                </tr>
+            </table>
+        </form>
+
+*@
+

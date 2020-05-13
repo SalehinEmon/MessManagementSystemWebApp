@@ -1,0 +1,196 @@
+﻿@using MessManagementSystemWebApp.Models;
+@using MessManagementSystemWebApp.Manager;
+@{
+    ViewBag.Title = "MealCount";
+}
+
+<h2>MealCount</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "" }))
+{
+    <div class="container">
+
+        <div class="form-group row">
+
+            @Html.Label("fromdate", "From Date", new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-5">
+                @Html.TextBox("fromdate", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.Label("todate", "To Date", new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-5">
+                @Html.TextBox("todate", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+
+}
+
+<br />
+
+@if (ViewBag.fromdate != null && ViewBag.todate != null)
+{
+    int counter = 1;
+    UserManager userManager = new UserManager();
+    OrderManager orderManager = new OrderManager();
+
+    List<User> allUsers = userManager.GetAllUser();
+
+    DateTime fromDate = DateTime.Parse(ViewBag.fromdate);
+    DateTime toDate = DateTime.Parse(ViewBag.todate);
+    int differenceOfDays = (toDate - fromDate).Days;
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Sl no.</td>
+                <td>Name</td>
+
+                @for (int i = 0; i < differenceOfDays + 1; i++)
+                {
+                    <td>@fromDate.AddDays(i).ToString("yyyy-MM-dd")</td>
+
+                }
+                <td>Total</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (User user in allUsers)
+            {
+            <tr>
+                <td>@(counter++)</td>
+
+                @if (user.Status == "inactive")
+                {
+                    <td class="text-danger" >@user.Name</td>
+                }
+                else
+                {
+                    <td>@user.Name</td>
+                }
+
+                @for (int i = 0; i < differenceOfDays + 1; i++)
+                {
+                    Order order = orderManager.GetAllOrderByUserIdAndDate(fromDate.AddDays(i), user.Id);
+                    if (order == null)
+                    {
+                        @*<td colspan="1">0</td>
+                <td colspan="1">0</td>
+                <td colspan="1">0</td>*@
+
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    }
+                    else
+                    {
+                        @*<td colspan="1">@order.Meal1</td>
+                <td colspan="1">@order.Meal2</td>
+                <td colspan="1">@order.Meal3</td>*@
+
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>@order.Meal1</td>
+                                    <td>@order.Meal2</td>
+                                    <td>@order.Meal3</td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    }
+
+                }
+                <td>@orderManager.GetTotalMealBetweenDays(ViewBag.fromdate, ViewBag.todate, user.Id)</td>
+            </tr>
+            }
+            <tr>
+                <td></td>
+                <td>Total</td>
+
+                @for (int i = 0; i < differenceOfDays + 1; i++)
+                {
+                    @*<td>@fromDate.AddDays(i).ToString("yyyy-MM-dd")</td>*@
+                    <td>
+
+                        <table>
+                            <tr>
+                                <td>@orderManager.GetTotalMeal1CostAllUserByDay(fromDate.AddDays(i).ToString("yyyy-MM-dd"))</td>
+                                <td>@orderManager.GetTotalMeal2CostAllUserByDay(fromDate.AddDays(i).ToString("yyyy-MM-dd"))</td>
+                                <td>@orderManager.GetTotalMeal3CostAllUserByDay(fromDate.AddDays(i).ToString("yyyy-MM-dd"))</td>
+                            </tr>
+                        </table>
+                    </td>
+
+                }
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+
+@section scripts{
+    <script>
+        document.getElementById("showReport").className += "  active";
+
+        var datepickerOption =
+        {
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true
+        }
+
+        $(function () {
+            $("#fromdate").datepicker(datepickerOption);
+
+            @if(ViewBag.fromdate != null)
+            {
+                 <text>
+                    $("#fromdate").datepicker("setDate", new Date('@ViewBag.fromdate'))
+                 </text>
+            }
+            else
+            {
+                <text>
+                    $("#fromdate").datepicker("setDate", new Date())
+                </text>
+
+            }
+
+            //$("#fromdate").datepicker("setDate", new Date());
+        });
+
+        $(function () {
+            $("#todate").datepicker(datepickerOption);
+
+            @if(ViewBag.todate != null)
+            {
+                 <text>
+                    $("#todate").datepicker("setDate", new Date('@ViewBag.todate'))
+                 </text>
+            }
+            else
+            {
+                <text>
+                    $("#todate").datepicker("setDate", new Date())
+                </text>
+
+            }
+
+            //$("#todate").datepicker("setDate", new Date());
+        });
+    </script>
+}

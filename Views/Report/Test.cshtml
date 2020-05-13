@@ -1,0 +1,16 @@
+﻿@using MessManagementSystemWebApp.Models;
+@using MessManagementSystemWebApp.Manager;
+@{
+    ViewBag.Title = "Test";
+    OrderManager orderManager = new OrderManager();
+
+
+
+}
+
+<h2>Test</h2>
+<h1>@(orderManager.GetTotalMeal1CostAllUserByDay("2019-12-27"))</h1>
+<h1>@(orderManager.GetTotalMeal2CostAllUserByDay("2019-12-27"))</h1>
+<h1>@(orderManager.GetTotalMeal3CostAllUserByDay("2019-12-27"))</h1>
+
+

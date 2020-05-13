@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Expense";
+}
+
+    <h2>Expense</h2>
+
+@if(ViewBag.msg != null)
+{
+    <h3>@ViewBag.msg</h3>
+}
+
+
+<a href="/Expense/add">Add Expense</a> <br />
+<a href="/Expense/info">Meal Information</a> <br />
+<a href="/Expense/ExpenseForMonth">Meal Information Per Month</a> <br />
+<a href="/Expense/allexpenseofmonth">List Of All Expenses</a> <br />

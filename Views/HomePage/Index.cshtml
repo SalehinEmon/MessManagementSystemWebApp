@@ -1,0 +1,42 @@
+﻿@using MessManagementSystemWebApp.Models;
+
+@{
+
+
+    User currentUser = Session["user"] as User;
+    ViewBag.Title = currentUser.Name;
+}
+
+
+@*<h2 class="text-center">Welcome Mr. @currentUser.Name</h2>*@
+
+<div class="card">
+    <div class="card-header">
+        <h2>Welcome Mr. @currentUser.Name</h2>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Put Your Meal order Here</h5>
+        <p class="card-text">You can put Your order or cancel  it From Here </p>
+        <a href="/neworder/" class="btn btn-primary">Put Order</a>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+
+

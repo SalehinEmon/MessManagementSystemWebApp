@@ -1,0 +1,42 @@
+﻿@using MessManagementSystemWebApp.Manager;
+@using MessManagementSystemWebApp.Models;
+@{
+    ViewBag.Title = "AllExpenseOfMonth";
+    
+}
+
+<h2>All Expense Of Month</h2>
+
+@if (ViewBag.AllExpenseOfMonth != null)
+{
+    UserManager userManager = new UserManager();
+
+    List<Expense> listOfExpense = ViewBag.AllExpenseOfMonth;
+
+    int counter = 1;
+
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th>Sl. No</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+                
+            </tr>
+        </thead>
+        @foreach (Expense expenser in listOfExpense)
+        {
+            <tr>
+                <td>@(counter++)</td>
+                <td>@userManager.GetUserByUserId(expenser.UserId).Name</td>
+                <td>@expenser.Amount</td>
+                <td>@DateTime.Parse(expenser.Date).ToString("yyyy-MM-dd") </td>
+              
+            </tr>
+
+        }
+    </table>
+
+}
+

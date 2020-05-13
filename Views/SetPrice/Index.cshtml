@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Set Price";
+}
+
+<h2>Set Price</h2>
+
+@if (ViewBag.msg != null)
+{
+    <h2>@ViewBag.msg</h2>
+}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post))
+{
+    <div class="form-group row">
+
+        @Html.Label("name", "Enter the price of the meal : ", new { @class = "col-sm-3 col-form-labe" })
+        <div class="col-sm-4">
+            @Html.TextBox("pricepermeal", null, new { @class = "form-control",type="number" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-7">
+            <button type="submit" class="btn btn-primary btn-block">Set Price</button>
+        </div>
+    </div>
+
+}
+
+<script>
+    document.getElementById("mealSetting").className += "  active";
+</script>
+

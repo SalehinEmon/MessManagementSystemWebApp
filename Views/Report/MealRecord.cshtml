@@ -1,0 +1,225 @@
+﻿@using MessManagementSystemWebApp.Manager;
+@using MessManagementSystemWebApp.Models;
+@using MessManagementSystemWebApp.OtherClass;
+@{
+    ViewBag.Title = "Meal Record";
+
+}
+
+@section cssandjs
+{
+    <link href="~/Content/jqueryvalidation/errorMsg.css" rel="stylesheet" />
+
+}
+
+<h2>Meal Record</h2>
+
+@*<h2>Total meal @orderManager.GetTotalMealBetweenDays("2019-12-25", "2019-12-27", 2)</h2>
+    <h2>Total Cost @orderManager.GetTotalMealCostBetweenDays("2019-12-25", "2019-12-30", 2)</h2>*@
+
+@*@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "mealRecord", id = "mealRecord" }))
+    {
+        <div class="container">
+
+            <div class="form-group row">
+
+                @Html.Label("fromdate", "From Date", new { @class = "col-sm-2 col-form-label" })
+                <div class="col-sm-5">
+                    @Html.TextBox("fromdate", null, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.Label("todate", "To Date", new { @class = "col-sm-2 col-form-label" })
+                <div class="col-sm-5">
+                    @Html.TextBox("todate", null, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <input type="submit" value="Search" class="btn btn-primary" />
+        </div>
+
+    }*@
+
+<br />
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "mainForm", id = "mainform" }))
+{
+
+    <div class="form-group row">
+
+        @Html.Label("month", "Month", new { @class = "col-sm-1 col-form-label" })
+        <div class="col-sm-3">
+            @Html.DropDownList("month", ViewExtra.GenerateMonthList(), new { id = "month", @class = "browser-default custom-select mb-4 form-control" })
+        </div>
+
+
+
+        @Html.Label("year", "Year", new { id = "year", @class = "col-sm-1 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("year", DateTime.Now.Year, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-7">
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </div>
+    </div>
+
+}
+
+
+<br />
+
+
+@if (ViewBag.listOfAllUser != null)
+{
+    OrderManager orderManager = new OrderManager();
+
+    List<User> listOfAllUser = ViewBag.listOfAllUser;
+
+    int month = ViewBag.month;
+    int year = ViewBag.year;
+    ExpenseManager expenseManager = new ExpenseManager();
+    double averageMealPriceOfCurrentMonth = expenseManager.GetAverageMealPriceOfMonth(month, year);
+
+    int counter = 1;
+    double totalMeal = 0;
+    double totalMealCost = 0;
+
+    @*<p>Summery of Meal Record Between @fromdate to @todate</p>*@
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sl. No</th>
+                <th>Name</th>
+                <th>Total Meal</th>
+                <th>Total Cost</th>
+                <th>Balance</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (User user in listOfAllUser)
+            {
+
+                double totalMealOfUser = orderManager.GetTotalMealOfMonth(month, year, user.Id);
+                double totalMealCostOfUser = orderManager.GetTotalMealCostOfMonth(month, year, user.Id);
+
+                totalMeal += totalMealOfUser;
+                totalMealCost += totalMealCostOfUser;
+
+
+
+                <tr>
+                    <td>@(counter++)</td>
+                    <td>@user.Name</td>
+                    <td>@totalMealOfUser</td>
+
+                    @if (DateTime.Now.Month == month && DateTime.Now.Year == year)
+                    {
+                        <td>@(Math.Round(averageMealPriceOfCurrentMonth * totalMealOfUser, 3, MidpointRounding.ToEven))</td>
+                        
+
+                        { 
+                            totalMealCost += averageMealPriceOfCurrentMonth * totalMealOfUser;
+                        }
+                        //Math.Round(averageMealPriceOfMonth, 3, MidpointRounding.ToEven)
+
+                    }
+                    else
+                    {
+
+                        <td>@totalMealCostOfUser</td>
+                    }
+                    <td>@user.AccountBalance</td>
+                    <td>--</td>
+                </tr>
+
+            }
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td>@totalMeal</td>
+                <td>@Math.Round(totalMealCost,3, MidpointRounding.ToEven)</td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+
+
+@*<form>
+        <input type="text" id="testCalender" name="testCalender" value="" />
+    </form>*@
+
+
+
+
+<script src="~/Content/jqueryvalidation/jquery.validate.js"></script>
+@*<script>
+        $(document).ready(function () {
+
+            $("#newUserForm").validate({
+                rules: {
+                    fromdate: {
+                        required: true
+                    },
+                    todate:
+                    {
+                        required: true
+
+                    }
+
+                }
+
+            });
+
+
+        });
+    </script>*@
+
+@section scripts{
+
+    <script>
+
+        document.getElementById("showReport").className += "  active";
+
+        $(document).ready(function () {
+
+            $("#mainform").validate({
+                rules: {
+                    month: {
+                        required: true
+                        //minlength:2
+                    },
+                    year:
+                    {
+                        required: true,
+                        min: 2019
+                    }
+                },
+
+
+                messages: {
+                    firstname: {
+                        minlength: "User Name should be more then 2 !!!",
+                        required: "User name Should be provided"
+                    },
+                    testemail: {
+                        required: "Email should be provided",
+                        email: "Provide a valid email"
+                    }
+                }
+
+            });
+
+        });
+
+
+    </script>
+}

@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Set Time";
+}
+
+<h2>Set Time</h2>
+
+@if (ViewBag.msg != null)
+{
+    <h2>@ViewBag.msg</h2>
+}
+
+@section cssandjs
+{
+    <link href="~/Content/jqueryvalidation/errorMsg.css" rel="stylesheet" />
+
+}
+
+@*<form method="post" action="">
+        <table>
+            <tr>
+                <td>Meal 1 Start Time</td>
+                <td><input type="text" name="time1start" class="timepicker" id="time1start" value="" /></td>
+
+                <td>Meal 1 End Time</td>
+                <td><input type="text" name="time1end" id="time1end" value="" /></td>
+
+            </tr>
+
+            <tr>
+                <td>Meal 2 Start Time</td>
+                <td><input type="text" name="time2start" id="time2start" value="" /></td>
+
+                <td>Meal 2 End Time</td>
+                <td><input type="text" name="time2end" id="time2end" value="" /></td>
+
+            </tr>
+
+            <tr>
+                <td>Meal 3 Start Time</td>
+                <td><input type="text" name="time3start" id="time3start" value="" /></td>
+
+                <td>Meal 3 End Time</td>
+                <td><input type="text" name="time3end" id="time3end" value="" /></td>
+
+            </tr>
+
+            <tr>
+                <td> <input type="submit" name="submit" value="Set Time" /> </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+
+        </table>
+    </form>
+
+    <br />
+    <br />*@
+
+@using (Html.BeginForm(null, null, FormMethod.Post,new {@class="timeForm",id="timeForm" }))
+{
+    <div class="form-group row">
+
+        @Html.Label("time1start", "Meal 1 Start Time", new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("time1start", null, new { @class = "form-control" })
+        </div>
+
+        @Html.Label("time1end", "Meal 1 End Time", new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("time1end", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+
+        @Html.Label("time2start", "Meal 2 Start Time", new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("time2start", null, new { @class = "form-control" })
+        </div>
+
+        @Html.Label("time2end", "Meal 2 End Time", new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("time2end", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+
+        @Html.Label("time3start", "Meal 3 Start Time", new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("time3start", null, new { @class = "form-control" })
+        </div>
+
+        @Html.Label("time3end", "Meal 3 End Time", new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-3">
+            @Html.TextBox("time3end", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Set Time</button>
+        </div>
+    </div>
+
+
+}
+
+
+<script src="~/Content/jqueryvalidation/jquery.validate.min.js"></script>
+
+<script>
+
+    document.getElementById("mealSetting").className += "  active";
+
+    var wickedPickerStartOption =
+    {
+        title: '  '
+
+    }
+
+
+
+    $('#time1start').wickedpicker(wickedPickerStartOption);
+    $('#time1end').wickedpicker();
+
+    $('#time2start').wickedpicker();
+    $('#time2end').wickedpicker();
+
+    $('#time3start').wickedpicker();
+    $('#time3end').wickedpicker();
+
+
+
+
+    $(document).ready(function () {
+
+        $("#timeForm").validate({
+            rules: {
+                time1start: {
+                    required: true
+                    //minlength:2
+                },
+                time2start:
+                {
+                    required: true
+                    
+                },
+                time3start:
+                {
+                    required: true
+                    
+                },
+
+                 time1end:
+                {
+                    required: true
+                    
+                },
+                time2end:
+                {
+                    required: true
+                    
+                },
+                time3end:
+                {
+                    required: true
+                    
+                }
+            }
+
+        });
+
+    });
+
+</script>
